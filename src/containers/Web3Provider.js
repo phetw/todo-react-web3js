@@ -1,18 +1,58 @@
 import React, { Component } from 'react'
 import Web3 from 'web3'
 
-class Web3Provider extends Component {
-  // TODO: context
-  state = {}
-  constructor(props) {
-    super(props)
+const Web3Context = React.createContext({
+  web3: new Web3(Web3.givenProvider || 'http://localhost:8545'),
+  address: [],
+  balance: undefined
+})
+
+export const Web3Consumer = Web3Context.Consumer
+export default class Web3Provider extends Component {
+  state = {
+    address: [],
+    balance: undefined
+  }
+  constructor() {
+    super()
+    this.web3 = new Web3(Web3.givenProvider || 'http://localhost:8545')
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.getAddress()
+  }
+
+  getAddress = async () => {
+    this.setState(
+      {
+        address: await this.web3.eth.getAccounts()
+      },
+      () => {
+        this.getBalance(this.state.address[0])
+      }
+    )
+  }
+
+  getBalance = async address => {
+    if (address) {
+      this.setState({
+        balance: await this.web3.eth.getBalance(address)
+      })
+    }
+  }
 
   render() {
-    return <div />
+    const { address, balance } = this.state
+    return (
+      <Web3Context.Provider
+        data={{
+          web3: this.web3,
+          address: address,
+          balance: balance
+        }}
+      >
+        {this.props.children}
+      </Web3Context.Provider>
+    )
   }
 }
-
-export default Web3Provider

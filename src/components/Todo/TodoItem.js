@@ -1,4 +1,5 @@
 import React from 'react'
+import Proptypes from 'prop-types'
 import styled from 'styled-components'
 
 const TodoItemWrapper = styled.div`
@@ -33,7 +34,7 @@ const TextContainer = styled.div`
 `
 const Text = styled.p``
 
-export default ({ todos: { status, todo } }) => (
+const TodoItem = ({ todos: { status, todo } }) => (
   <TodoItemWrapper>
     <StatusContainer>
       <Status> {status ? '✅' : '❗️'}</Status>
@@ -43,3 +44,10 @@ export default ({ todos: { status, todo } }) => (
     </TextContainer>
   </TodoItemWrapper>
 )
+
+Proptypes.TodoItem = {
+  key: Proptypes.string,
+  todos: Proptypes.object
+}
+
+export default TodoItem

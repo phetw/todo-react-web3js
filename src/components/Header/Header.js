@@ -25,13 +25,21 @@ const Address = styled.p`
   }
 `
 
-function weiToEther(wei) {
-  return parseInt(wei, 10) / Math.pow(10, 18).toFixed(3)
+function weiToEther(wei = '0') {
+  const ether = parseInt(wei, 10) / Math.pow(10, 18)
+  return ether.toFixed(3)
 }
 
-const Header = ({ address = ['-'], balance = '0.00' }) => (
+function getAddr(addrArray = []) {
+  if (addrArray.length !== 0) {
+    return addrArray[0]
+  }
+  return 'Please Login to your Metamask before using.'
+}
+
+const Header = ({ address, balance }) => (
   <HeaderWrapper>
-    <Address>{address.map(addr => addr)}</Address>
+    <Address>{getAddr(address)}</Address>
     <Balance>{weiToEther(balance)} ETH</Balance>
   </HeaderWrapper>
 )

@@ -18,26 +18,17 @@ const Title = styled.h3`
   text-align: center;
 `
 
-class App extends Component {
+const Web3Context = React.createContext({
+  web3: new Web3(Web3.givenProvider || 'http://localhost:8545'),
+  address: [],
+  balance: undefined
+})
+export const Web3Consumer = Web3Context.Consumer
+class Web3Provider extends Component {
   state = {
-    address: undefined,
-    balance: undefined,
-    data: [
-      {
-        status: false,
-        todo: 'sleep'
-      },
-      {
-        status: false,
-        todo: 'eat'
-      },
-      {
-        status: true,
-        todo: 'code'
-      }
-    ]
+    address: [],
+    balance: undefined
   }
-
   constructor() {
     super()
     this.web3 = new Web3(Web3.givenProvider || 'http://localhost:8545')
@@ -59,26 +50,59 @@ class App extends Component {
   }
 
   getBalance = async address => {
-    this.setState({
-      balance: await this.web3.eth.getBalance(address)
-    })
+    if (address) {
+      this.setState({
+        balance: await this.web3.eth.getBalance(address)
+      })
+    }
   }
 
   render() {
-    const web3 = this.web3
     const { address, balance } = this.state
-
     return (
-      <AppWrapper>
-        {web3 ? (
+      <Web3Context.Provider
+        value={{
+          web3: this.web3,
+          address: address,
+          balance: balance
+        }}
+      >
+        {this.props.children}
+      </Web3Context.Provider>
+    )
+  }
+}
+
+class App extends Component {
+  state = {
+    data: [
+      {
+        status: false,
+        todo: 'sleep'
+      },
+      {
+        status: false,
+        todo: 'eat'
+      },
+      {
+        status: true,
+        todo: 'code'
+      }
+    ]
+  }
+
+  render() {
+    return (
+      <Web3Provider>
+        <AppWrapper>
           <Fragment>
-            <Header address={address} balance={balance} />
+            <Web3Consumer>{({ address, balance }) => <Header address={address} balance={balance} />}</Web3Consumer>
             <Title>Todo 📝</Title>
             <TodoList data={this.state.data} />
             <Footer />
           </Fragment>
-        ) : null}
-      </AppWrapper>
+        </AppWrapper>
+      </Web3Provider>
     )
   }
 }
