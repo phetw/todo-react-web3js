@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 import TodoList from './components/Todo/TodoList'
 import Header from './components/Header/Header'
@@ -20,7 +20,8 @@ const Title = styled.h3`
 
 class App extends Component {
   state = {
-    web3: null,
+    address: undefined,
+    balance: undefined,
     data: [
       {
         status: false,
@@ -37,25 +38,46 @@ class App extends Component {
     ]
   }
 
-  componentDidMount() {
-    this.initialiseWeb3()
+  constructor() {
+    super()
+    this.web3 = new Web3(Web3.givenProvider || 'http://localhost:8545')
   }
 
-  initialiseWeb3() {
+  componentDidMount() {
+    this.getAddress()
+  }
+
+  getAddress = async () => {
+    this.setState(
+      {
+        address: await this.web3.eth.getAccounts()
+      },
+      () => {
+        this.getBalance(this.state.address[0])
+      }
+    )
+  }
+
+  getBalance = async address => {
     this.setState({
-      web3: new Web3(Web3.givenProvider || 'http://localhost:8545')
+      balance: await this.web3.eth.getBalance(address)
     })
-    console.log(new Web3(Web3.givenProvider || 'http://localhost:8545'))
-    // web3.eth.getAccounts().then(console.log)
   }
 
   render() {
+    const web3 = this.web3
+    const { address, balance } = this.state
+
     return (
       <AppWrapper>
-        <Header balance={'12.0'} />
-        <Title>Todo 📝</Title>
-        <TodoList data={this.state.data} />
-        <Footer />
+        {web3 ? (
+          <Fragment>
+            <Header address={address} balance={balance} />
+            <Title>Todo 📝</Title>
+            <TodoList data={this.state.data} />
+            <Footer />
+          </Fragment>
+        ) : null}
       </AppWrapper>
     )
   }
