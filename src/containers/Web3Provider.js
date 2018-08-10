@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Web3 from 'web3'
 
 const Web3Context = React.createContext({
-  web3: new Web3(Web3.givenProvider || 'http://localhost:8545'),
+  web3: new Web3(Web3.givenProvider || 'http://localhost:9545'),
   address: [],
   balance: undefined
 })
@@ -15,10 +15,10 @@ export default class Web3Provider extends Component {
   }
   constructor() {
     super()
-    this.web3 = new Web3(Web3.givenProvider || 'http://localhost:8545')
+    this.web3 = new Web3(Web3.givenProvider || 'http://localhost:9545')
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
     this.getAddress()
   }
 
@@ -28,7 +28,8 @@ export default class Web3Provider extends Component {
         address: await this.web3.eth.getAccounts()
       },
       () => {
-        this.getBalance(this.state.address[0])
+        const [address] = this.state.address
+        this.getBalance(address)
       }
     )
   }
