@@ -45,7 +45,7 @@ export default class Web3Provider extends Component {
     const { address, balance } = this.state
     return (
       <Web3Context.Provider
-        data={{
+        value={{
           web3: this.web3,
           address: address,
           balance: balance

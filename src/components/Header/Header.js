@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import { Web3Consumer } from '../../containers/Web3Provider'
 
 const HeaderWrapper = styled.header`
   width: 100%;
@@ -37,11 +38,15 @@ function getAddr(addrArray = []) {
   return 'Please Login to your Metamask before using.'
 }
 
-const Header = ({ address, balance }) => (
-  <HeaderWrapper>
-    <Address>{getAddr(address)}</Address>
-    <Balance>{weiToEther(balance)} ETH</Balance>
-  </HeaderWrapper>
+const Header = () => (
+  <Web3Consumer>
+    {({ address, balance }) => (
+      <HeaderWrapper>
+        <Address>{getAddr(address)}</Address>
+        <Balance>{weiToEther(balance)} ETH</Balance>
+      </HeaderWrapper>
+    )}
+  </Web3Consumer>
 )
 
 Header.propTypes = {
