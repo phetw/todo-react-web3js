@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import { Web3Consumer } from '../../containers/Web3Provider'
 
 const HeaderWrapper = styled.header`
@@ -48,10 +47,5 @@ const Header = () => (
     )}
   </Web3Consumer>
 )
-
-Header.propTypes = {
-  address: PropTypes.array,
-  balance: PropTypes.string
-}
 
 export default Header
