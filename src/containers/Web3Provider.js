@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import Web3 from 'web3'
+import { abi } from '../contracts/Todos.json'
 
+const DEPLOY_ADDR = '0x82b99a0a946f6b2408e123ba50689a3cc6be2943'
 const Web3Context = React.createContext({
-  web3: new Web3(Web3.givenProvider || 'http://localhost:9545'),
   address: [],
   balance: undefined
 })
@@ -16,9 +17,11 @@ export default class Web3Provider extends Component {
   constructor() {
     super()
     this.web3 = new Web3(Web3.givenProvider || 'http://localhost:9545')
+    const web3 = this.web3
+    this.contractInstance = new web3.eth.Contract(abi, DEPLOY_ADDR)
   }
 
-  componentDidMount = async () => {
+  componentDidMount() {
     this.getAddress()
   }
 
@@ -29,6 +32,8 @@ export default class Web3Provider extends Component {
       },
       () => {
         const [address] = this.state.address
+
+        this.web3.eth.defaultAccount = address
         this.getBalance(address)
       }
     )
@@ -47,9 +52,9 @@ export default class Web3Provider extends Component {
     return (
       <Web3Context.Provider
         value={{
-          web3: this.web3,
           address: address,
-          balance: balance
+          balance: balance,
+          methods: this.contractInstance.methods
         }}
       >
         {this.props.children}
