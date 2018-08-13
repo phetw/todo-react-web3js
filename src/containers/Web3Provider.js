@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Web3 from 'web3'
 import { abi } from '../contracts/Todos.json'
 
-const DEPLOY_ADDR = '0x82b99a0a946f6b2408e123ba50689a3cc6be2943'
+const DEPLOY_ADDR = '0x9febb983aedca2055c6111732d43b11aae76c294'
 const Web3Context = React.createContext({
   address: [],
   balance: undefined
