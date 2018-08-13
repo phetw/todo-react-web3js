@@ -23,17 +23,19 @@ const AddButton = styled.button`
   }
 `
 
-export default class Add extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
+export default class AddTodo extends Component {
+  componentDidMount() {}
 
-  componentDidMount() {
-    console.log(this.props)
+  createNewTodo = async () => {
+    const { create } = this.props
+    await create(this.props.text).send({
+      // handle modal close
+      // TODO: fix address null bug
+      from: '0x627306090abab3a6e1400e9345bc60c78a8bef57'
+    })
   }
 
   render() {
-    return <AddButton>Add</AddButton>
+    return <AddButton onClick={this.createNewTodo}>Add</AddButton>
   }
 }
