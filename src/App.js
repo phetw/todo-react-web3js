@@ -62,21 +62,7 @@ const TodoInput = styled.input`
 class App extends Component {
   state = {
     modal: false,
-    newTodo: '',
-    data: [
-      {
-        status: false,
-        todo: 'sleep'
-      },
-      {
-        status: false,
-        todo: 'eat'
-      },
-      {
-        status: true,
-        todo: 'code'
-      }
-    ]
+    newTodo: ''
   }
 
   showModal = () => {
@@ -92,7 +78,7 @@ class App extends Component {
   }
 
   render() {
-    const { data, modal, newTodo } = this.state
+    const { modal, newTodo } = this.state
 
     return (
       <Web3Provider>
@@ -101,15 +87,15 @@ class App extends Component {
           <Title>Todo 📝</Title>
           <Add onClick={this.showModal}>+</Add>
           <Web3Consumer>
-            {({ methods }) => (
+            {({ address, methods: { create } }) => (
               <Rodal width={300} visible={modal} onClose={this.hideModal}>
                 <Title>Add todo</Title>
                 <TodoInput value={newTodo} onChange={this.onTypeNewTodo} />
-                <AddTodo data={newTodo} methods={methods} />
+                <AddTodo address={address} text={newTodo} create={create} hideModal={this.hideModal} />
               </Rodal>
             )}
           </Web3Consumer>
-          <TodoList data={data} />
+          <Web3Consumer>{({ methods: { todos } }) => <TodoList listTodo={todos} />}</Web3Consumer>
           <Footer />
         </AppWrapper>
       </Web3Provider>
