@@ -9,22 +9,17 @@ contract Todos {
     }
     
     uint todosCount;
-    Todo[] todoList;
+    mapping(uint => Todo) public todos;
     
     constructor() public {
     }
     
-    function create(string todoText) public {
+    function create(string todo) public {
         uint id = todosCount++;
-        todoList.push(Todo(id, todoText, msg.sender, false));
-    }
-    
-    function get(uint id) public view returns (uint _id, string _todoText, address _author, bool _isComplete){
-        return (todoList[id].id, todoList[id].todo, todoList[id].author,todoList[id].isComplete);
+        todos[id] = Todo(id, todo , msg.sender, false);
     }
     
     function toggleStatus(uint id) public {
-        todoList[id].isComplete = !todoList[id].isComplete;
+        todos[id].isComplete = !todos[id].isComplete;
     }
-    
 }
