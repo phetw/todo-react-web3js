@@ -30,11 +30,11 @@ function weiToEther(wei = '0') {
   return ether.toFixed(3)
 }
 
-function getAddr(addrArray = []) {
-  if (addrArray.length !== 0) {
-    return addrArray[0]
+function getAddr(address) {
+  if (!address) {
+    return 'Please Login to your Metamask before using.'
   }
-  return 'Please Login to your Metamask before using.'
+  return address
 }
 
 const Header = () => (
