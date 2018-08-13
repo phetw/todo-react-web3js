@@ -12,7 +12,7 @@ const TodoItemWrapper = styled.div`
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
   display: grid;
   grid-gap: 0;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 70px 1fr 1fr 1fr;
 `
 
 const StatusContainer = styled.div`
@@ -29,19 +29,30 @@ const TextContainer = styled.div`
   margin: 0;
   display: flex;
   align-items: center;
-  grid-column-start: 2;
+  grid-column: 2;
   grid-column-end: 5;
 `
+
+const Author = styled.p`
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column-start: 4;
+  grid-column-end: 5;
+`
+
 const Text = styled.p``
 
-const TodoItem = ({ todos: { status, todo } }) => (
+const TodoItem = ({ todos: { todo, isComplete, author } }) => (
   <TodoItemWrapper>
     <StatusContainer>
-      <Status> {status ? '✅' : '❗️'}</Status>
+      <Status> {isComplete ? '✅' : '❗️'}</Status>
     </StatusContainer>
     <TextContainer>
       <Text>{todo}</Text>
     </TextContainer>
+    {/* <Author>{author}</Author> */}
   </TodoItemWrapper>
 )
 
