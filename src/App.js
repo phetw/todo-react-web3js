@@ -74,12 +74,12 @@ class App extends Component {
   }
 
   onTypeNewTodo = e => {
+    // TODO: limit max chars
     this.setState({ newTodo: e.target.value })
   }
 
   render() {
     const { modal, newTodo } = this.state
-
     return (
       <Web3Provider>
         <AppWrapper>
@@ -91,7 +91,7 @@ class App extends Component {
               <Rodal width={300} visible={modal} onClose={this.hideModal}>
                 <Title>Add todo</Title>
                 <TodoInput value={newTodo} onChange={this.onTypeNewTodo} />
-                <AddTodo address={address} text={newTodo} create={create} hideModal={this.hideModal} />
+                <AddTodo address={address} text={newTodo} create={create} />
               </Rodal>
             )}
           </Web3Consumer>
