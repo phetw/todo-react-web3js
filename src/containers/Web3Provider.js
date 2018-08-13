@@ -11,7 +11,7 @@ const Web3Context = React.createContext({
 export const Web3Consumer = Web3Context.Consumer
 export default class Web3Provider extends Component {
   state = {
-    address: [],
+    address: undefined,
     balance: undefined
   }
   constructor() {
@@ -26,22 +26,14 @@ export default class Web3Provider extends Component {
   }
 
   getAddress = async () => {
-    this.setState(
-      {
-        address: await this.web3.eth.getAccounts()
-      },
-      () => {
-        const [address] = this.state.address
-
-        this.web3.eth.defaultAccount = address
-        this.getBalance(address)
-      }
-    )
+    ;[this.web3.eth.defaultAccount] = await this.web3.eth.getAccounts()
+    this.getBalance(this.web3.eth.defaultAccount)
   }
 
   getBalance = async address => {
     if (address) {
       this.setState({
+        address: address,
         balance: await this.web3.eth.getBalance(address)
       })
     }
